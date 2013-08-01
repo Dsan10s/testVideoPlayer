@@ -12,9 +12,18 @@ Parse.initialize("mqzGZgOEytP3cZP5PELOrGi6wOrohw6jyZo3iRJc", "z8HMJaDGWSwxjJQQwG
 // Set number of dummy comments
   var commentNum = 6;
   var commentNumArray = ["ph"];
-  var commentArray = ["ph"];
+  var commentArray = ["ph", 
+  {commentNum: 1, commentType: "C", upvotes: 0, commentText: "", time: 20, userName: "Student1"}, 
+  {commentNum: 2, commentType: "Q", upvotes: 0, commentText: "", time: 37, userName: "Student2"}, 
+  {commentNum: 3, commentType: "IN", upvotes: 0, commentText: "", time: 40, userName: "Instructor1"}, 
+  {commentNum: 4, commentType: "C", upvotes: 0, commentText: "", time: 90, userName: "Student 3"}, 
+  {commentNum: 5, commentType: "Q", upvotes: 0, commentText: "", time: 10, userName: "Student 4"}, 
+  {commentNum: 6, commentType: "Q", upvotes: 0, commentText: "", time: 130, userName: "Student 5"}];
   for (var i = 1; i <= commentNum; i++){
     commentNumArray.push(i);
+  }
+  for (var i = 1; i <= commentArray.length - 1; i++){
+    
   }
 // End
 
@@ -268,7 +277,7 @@ $(document).ready(function(){
   
   
   // Initializes Test Comments
-    for (var i = 1; i <= commentNumArray.length - 1; i++){
+    /*for (var i = 1; i <= commentNumArray.length - 1; i++){
       var testComment = 
       '<div id = "comment_' + i + '" class = "newComment">'
         + '<span style = "position: relative"><div class = "userNameAndTime"><span id = "username">Dsan10s</span><span id = "userTime" style = "float: right;">00:00</span></div></span>'
@@ -283,7 +292,7 @@ $(document).ready(function(){
       testCommentObj.commentNum = i;
       testCommentObj.commentText = "Here you will see a bunch of text.  Sup.  If this formatted correctly then huzzah.";
       commentArray.push(testCommentObj);
-    }
+    }*/
   // End
   /*<div id = "comment_1" class = "newComment">
     <span style = "position: relative"><div class = "userNameAndTime"><span id = "username">Dsan10s</span><span id = "userTime" style = "float: right;">00:00</span></div></span>
@@ -422,6 +431,7 @@ $(document).ready(function(){
       var commentText = $("<textarea readonly class = 'commentText' style = 'cursor: default'></textarea>");
     // End
       var currentTime = (parseInt($("#minutes").html()) * 60) + parseInt($("#seconds").html());
+      console.log("currentTime: " + currentTime)
       var commentObj = {commentNum: 0, commentType: "", upvotes: 0, commentText: "", time: currentTime, userName: "User1"};
       var commentString = $("#minutes").html() + ":" + $("#seconds").html()
       //var NewCommentObj = Parse.Object.extend("NewCommentObj");
@@ -447,7 +457,7 @@ $(document).ready(function(){
         $(icon1).attr("src", "images/InstructorNoteIcon.png");
       }
       commentObj.commentText = $("#cmtTextInput").val();
-      commentObj.time = $("#commentTimeInput").val();
+      // commentObj.time = $("#commentTimeInput").val();
 
       console.log(commentObj);
       commentArray.push(commentObj);
@@ -478,6 +488,19 @@ $(document).ready(function(){
       $("#newCommentBtn").html("New Comment");
       $(".newCommentInput").css("display", "none");
       $("#cmtTextInput").val("");
+    // Gives clock icons functionality (goes to point in video where comment was created())
+      $(".goToTime").on("click", function(){
+        var thisID = JSON.stringify($(this).parent("div").attr("id"));
+        var thisNum = parseInt(thisID.slice(9, thisID.length));
+        for (var i = 1; i <= commentArray.length; i++){
+          if (commentArray[i].commentNum == thisNum){
+            ytplayer.seekTo(commentArray[i].time);
+            break;
+          }
+        }
+      });
+      $(".goToTime").tooltip({html: "Go to time in video"})
+    // End
     })
   // End
 
@@ -490,14 +513,16 @@ $(document).ready(function(){
   // End
 
   // Gives Clock Icons functionality (goes to point in video where comment was created)
-    $(".goToTime").on("click", function(){
+    /*$(".goToTime").on("click", function(){
       var thisID = JSON.stringify($(this).parent("span").parent("div").attr("id"));
       var thisNum = parseInt(thisID.slice(8, thisID.length));
+      console.log("thisNum: " + thisNum);
       for (var i = 1; i <= commentArray.length; i++){
         if (commentArray[i].commentNum == thisNum){
-
+          console.log("thisNum found");
+          ytplayer.seekTo(thisNum);
         }
       }
-    })
+    })*/
   // End
 });
