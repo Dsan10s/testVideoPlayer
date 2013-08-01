@@ -10,7 +10,7 @@ Parse.initialize("mqzGZgOEytP3cZP5PELOrGi6wOrohw6jyZo3iRJc", "z8HMJaDGWSwxjJQQwG
 // End
 
 // Set number of dummy comments
-  var commentNum = 3;
+  var commentNum = 6;
   var commentNumArray = ["ph"];
   var commentArray = ["ph"];
   for (var i = 1; i <= commentNum; i++){
@@ -246,6 +246,7 @@ google.setOnLoadCallback(_run);
     $(".tickMark").on("mouseleave", function(){
       // $(this).animate({"width": 1, "margin-left": parseFloat($(this).css("margin-left")) + 3}, 500);
       $(this).css("width", 1).css("margin-left", parseFloat($(this).css("margin-left")) + 3);
+      $(this).popover("hide");
     })
 
   }
@@ -370,40 +371,41 @@ $(document).ready(function(){
 
   // Creating a new Comment
 
-  var commentsHeight = parseInt($(".comments").css("height"));
-  $("#newCommentBtn").on("click", function(){
-    
-    var currentTimeString = $("#minutes").html() + ":" + $("#seconds").html()
-    $("#commentMinutesInput").val($("#minutes").html());
-    $("#commentSecondsInput").val($("#seconds").html());
-
-    console.log("click");
-    $("#newCommentBtn").html("Retract Comment");
-    
-    
-    $(".newCommentInput").css("display", "");
-    $(".comments").height(commentsHeight - $(".newCommentInput").height());
-    $("#cmtTypeBtn").on("click", function(){
+    var commentsHeight = parseInt($(".comments").css("height"));
+    $("#newCommentBtn").on("click", function(){
       
-      $("#cTypeQ").on("click", function(){
-        $("#cmtTypeBtn").html("Question");
-        // commentObj.commentType = "Q";
-        // console.log(commentObj);
+      var currentTimeString = $("#minutes").html() + ":" + $("#seconds").html()
+      $("#commentMinutesInput").val($("#minutes").html());
+      $("#commentSecondsInput").val($("#seconds").html());
+
+      console.log("click");
+      $("#newCommentBtn").html("Retract Comment");
+      
+      
+      $(".newCommentInput").css("display", "");
+      $(".comments").height(commentsHeight - $(".newCommentInput").height());
+      $("#cmtTypeBtn").on("click", function(){
+        
+        $("#cTypeQ").on("click", function(){
+          $("#cmtTypeBtn").html("Question");
+          // commentObj.commentType = "Q";
+          // console.log(commentObj);
+        });
+        $("#cTypeC").on("click", function(){
+          $("#cmtTypeBtn").html("Comment");
+          // commentObj.commentType = "C";
+          // console.log(commentObj);
+        });
+        $("#cTypeIN").on("click", function(){
+          $("#cmtTypeBtn").html("Instructor Note");
+          // commentObj.commentType = "IN";
+          // console.log(commentObj);
+        });
       });
-      $("#cTypeC").on("click", function(){
-        $("#cmtTypeBtn").html("Comment");
-        // commentObj.commentType = "C";
-        // console.log(commentObj);
-      });
-      $("#cTypeIN").on("click", function(){
-        $("#cmtTypeBtn").html("Instructor Note");
-        // commentObj.commentType = "IN";
-        // console.log(commentObj);
-      });
+      
+      // $("#newCommentBtn").attr("id", "retractCommentBtn");
     });
-    
-    // $("#newCommentBtn").attr("id", "retractCommentBtn");
-  });
+  // End
 
   // Posting a new comment
     $("#cmtPostBtn").on("click", function(){
@@ -470,7 +472,7 @@ $(document).ready(function(){
       
 
 
-      $(".comments").height(430);
+      $(".comments").height(490);
       
       
       $("#newCommentBtn").html("New Comment");
@@ -489,7 +491,13 @@ $(document).ready(function(){
 
   // Gives Clock Icons functionality (goes to point in video where comment was created)
     $(".goToTime").on("click", function(){
-       
+      var thisID = JSON.stringify($(this).parent("span").parent("div").attr("id"));
+      var thisNum = parseInt(thisID.slice(8, thisID.length));
+      for (var i = 1; i <= commentArray.length; i++){
+        if (commentArray[i].commentNum == thisNum){
+
+        }
+      }
     })
   // End
 });
