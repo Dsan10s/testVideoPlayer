@@ -9,22 +9,23 @@ Parse.initialize("mqzGZgOEytP3cZP5PELOrGi6wOrohw6jyZo3iRJc", "z8HMJaDGWSwxjJQQwG
   (function(d){d.each(["backgroundColor","borderBottomColor","borderLeftColor","borderRightColor","borderTopColor","color","outlineColor"],function(f,e){d.fx.step[e]=function(g){if(!g.colorInit){g.start=c(g.elem,e);g.end=b(g.end);g.colorInit=true}g.elem.style[e]="rgb("+[Math.max(Math.min(parseInt((g.pos*(g.end[0]-g.start[0]))+g.start[0]),255),0),Math.max(Math.min(parseInt((g.pos*(g.end[1]-g.start[1]))+g.start[1]),255),0),Math.max(Math.min(parseInt((g.pos*(g.end[2]-g.start[2]))+g.start[2]),255),0)].join(",")+")"}});function b(f){var e;if(f&&f.constructor==Array&&f.length==3){return f}if(e=/rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(f)){return[parseInt(e[1]),parseInt(e[2]),parseInt(e[3])]}if(e=/rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(f)){return[parseFloat(e[1])*2.55,parseFloat(e[2])*2.55,parseFloat(e[3])*2.55]}if(e=/#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(f)){return[parseInt(e[1],16),parseInt(e[2],16),parseInt(e[3],16)]}if(e=/#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(f)){return[parseInt(e[1]+e[1],16),parseInt(e[2]+e[2],16),parseInt(e[3]+e[3],16)]}if(e=/rgba\(0, 0, 0, 0\)/.exec(f)){return a.transparent}return a[d.trim(f).toLowerCase()]}function c(g,e){var f;do{f=d.css(g,e);if(f!=""&&f!="transparent"||d.nodeName(g,"body")){break}e="backgroundColor"}while(g=g.parentNode);return b(f)}var a={aqua:[0,255,255],azure:[240,255,255],beige:[245,245,220],black:[0,0,0],blue:[0,0,255],brown:[165,42,42],cyan:[0,255,255],darkblue:[0,0,139],darkcyan:[0,139,139],darkgrey:[169,169,169],darkgreen:[0,100,0],darkkhaki:[189,183,107],darkmagenta:[139,0,139],darkolivegreen:[85,107,47],darkorange:[255,140,0],darkorchid:[153,50,204],darkred:[139,0,0],darksalmon:[233,150,122],darkviolet:[148,0,211],fuchsia:[255,0,255],gold:[255,215,0],green:[0,128,0],indigo:[75,0,130],khaki:[240,230,140],lightblue:[173,216,230],lightcyan:[224,255,255],lightgreen:[144,238,144],lightgrey:[211,211,211],lightpink:[255,182,193],lightyellow:[255,255,224],lime:[0,255,0],magenta:[255,0,255],maroon:[128,0,0],navy:[0,0,128],olive:[128,128,0],orange:[255,165,0],pink:[255,192,203],purple:[128,0,128],violet:[128,0,128],red:[255,0,0],silver:[192,192,192],white:[255,255,255],yellow:[255,255,0],transparent:[255,255,255]}})(jQuery);
 // End
 
-// Set number of dummy comments
-  var commentNum = 6;
+// Initializes data arrays and dummy comments
+  var dummyNum = 6;
   var commentNumArray = ["ph"];
   var commentArray = ["ph", 
-  {commentNum: 1, commentType: "C", upvotes: 0, commentText: "", time: 20, userName: "Student1"}, 
-  {commentNum: 2, commentType: "Q", upvotes: 0, commentText: "", time: 37, userName: "Student2"}, 
-  {commentNum: 3, commentType: "IN", upvotes: 0, commentText: "", time: 40, userName: "Instructor1"}, 
-  {commentNum: 4, commentType: "C", upvotes: 0, commentText: "", time: 90, userName: "Student 3"}, 
-  {commentNum: 5, commentType: "Q", upvotes: 0, commentText: "", time: 10, userName: "Student 4"}, 
-  {commentNum: 6, commentType: "Q", upvotes: 0, commentText: "", time: 130, userName: "Student 5"}];
-  for (var i = 1; i <= commentNum; i++){
+  {commentNum: 1, commentType: "C", upvotes: 0, commentText: "1", commentTime: 20, userName: "Student1"}, 
+  {commentNum: 2, commentType: "Q", upvotes: 0, commentText: "2", commentTime: 37, userName: "Student2"}, 
+  {commentNum: 3, commentType: "IN", upvotes: 0, commentText: "3", commentTime: 120, userName: "Instructor1"}, 
+  {commentNum: 4, commentType: "C", upvotes: 0, commentText: "4", commentTime: 90, userName: "Student 3"}, 
+  {commentNum: 5, commentType: "Q", upvotes: 0, commentText: "5", commentTime: 10, userName: "Student 4"}, 
+  {commentNum: 6, commentType: "Q", upvotes: 0, commentText: "6", commentTime: 130, userName: "Student 5"}];
+  commentArray.sort(function(a, b){return a.commentTime - b.commentTime});
+  console.log("commentArray: " + JSON.stringify(commentArray));
+
+  for (var i = 1; i <= dummyNum; i++){
     commentNumArray.push(i);
   }
-  for (var i = 1; i <= commentArray.length - 1; i++){
-    
-  }
+  
 // End
 
 // Set the video width (in pixels) below
@@ -211,10 +212,15 @@ google.setOnLoadCallback(_run);
 
 // Tick Bar
   function createTick(commentType, commentNum, timeInSecs){
+
+    console.log("createTick called");
+    console.log("ytPlayer.getDuration: " + ytplayer.getDuration())
     var percentage = timeInSecs/ytplayer.getDuration();
+    console.log("percentage: " + percentage);
     var tickHeight = $("#tickBar").height();
     var tickBarWidth = $("#tickBar").width();
     var tickPosition = percentage * tickBarWidth;
+    console.log("tickPosition: " + tickPosition);
     if (commentType == "C"){
       var newTick = $("<div style = 'position: relative'><div id = 'tick_" + commentNum + "' class = 'tickMark' style = 'position: absolute; margin-left: " + tickPosition + "px; width: 1px; height: " + tickHeight + "px; background-color: #26af00'></div></div>");
     }else if (commentType == "Q"){
@@ -224,30 +230,164 @@ google.setOnLoadCallback(_run);
     }
     
     $("#tickBar").append(newTick);
-    $(".tickMark").on("mouseenter", function(){
+    
+    $("#tick_" + commentNum).on("mouseenter", function(){
+      console.log($(this))
+      console.log("margin-left: " + parseFloat($(this).css("margin-left")))
       $(this).css("width", 7).css("margin-left", parseFloat($(this).css("margin-left")) - 3);
       // $(this).animate({"width": 7, "margin-left": parseFloat($(this).css("margin-left")) - 3}, 500);
       var thisID = JSON.stringify($(this).attr("id"));
-      console.log(thisID);
       for (var i = 0; i <= thisID.length - 1; i++){
         if (thisID[i] == "_"){
           var numStart = i + 1;          
         }
       }
       var tickNum = parseInt(thisID.slice(numStart, thisID.length));
-      console.log(tickNum);
 
       for (var i = 1; i <= commentArray.length - 1; i++){
-        console.log(commentArray[i].commentNum);
-        console.log(tickNum);
         if (commentArray[i].commentNum == tickNum){
           var tickContent = commentArray[i].commentText;
           var tickTitle = commentArray[i].userName;
-          console.log(tickContent);
-          $(".tickMark").popover({trigger: "hover", placement: "bottom",title: tickTitle, content: tickContent});
+          $("#tick_" + commentNum).popover({trigger: "hover", placement: "bottom",title: tickTitle, content: tickContent});
           $(this).popover("show");
-        }else{
-          console.log("tickContent not found");
+        }
+      }
+      
+    })
+    $("#tick_" + commentNum).on("mouseleave", function(){
+      // $(this).animate({"width": 1, "margin-left": parseFloat($(this).css("margin-left")) + 3}, 500);
+      $(this).css("width", 1).css("margin-left", parseFloat($(this).css("margin-left")) + 3);
+      $(this).popover("hide");
+    })
+  }
+    
+// End
+
+// Comments
+  function createComment(CommentNum, CommentType, Upvotes, CommentText, Time, UserName){
+    var commentObj = {commentNum: CommentNum, commentType: CommentType, upvotes: Upvotes, commentText: CommentText, commentTime: Time, userName: UserName};
+    // commentArray.push(commentObj);
+    // commentNumArray.push(CommentNum);
+    console.log(commentObj);
+  // Initialize the new comment html 
+    var newComment = $("<div id = 'newComment'></div>");
+    var relativeSpan = $("<span style = 'position: relative'></span>")
+    var userNameAndTime = $("<div class = 'userNameAndTime'></div>");
+    var username = $("<span id = 'username'></span>");
+    var userTime = $("<span id = 'userTime' style = 'float: right'></span>")
+    var icon1 = $("<img src = 'images/CommentIcon.png' class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'/>");
+    var icon2 = $("<img src = 'images/GoToTimeIcon.png' class = 'icon goToTime' style = 'margin-left: 5px; margin-right: 4px;'/>");
+    var icon3 = $("<div class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'></div>");
+    var icon4 = $("<div class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'></div>");
+    var commentText = $("<textarea readonly class = 'commentText' style = 'cursor: default'></textarea>");
+  // End
+
+    if (CommentType == "Q"){$(icon1).attr("src", "images/QuestionIcon.png");}
+    else if (CommentType == "C"){/*Comment icon there by default*/}
+    else if (CommentType == "IN"){$(icon1).attr("src", "images/InstructorNoteIcon.png");}
+    commentObj.commentText = $("#cmtTextInput").val();       
+
+    $(relativeSpan).append(userNameAndTime)
+    $("commentText").html("<p>" + commentObj.commentText + "</p>");
+    console.log("commentNum: " + dummyNum);
+    console.log("videoWidth: " + videoWidth)
+    if (commentArray.length !== (dummyNum + 1)){
+      console.log("appending a new comment");
+      for (var i = 1; i <= commentArray.length - 1; i++){
+        if (commentArray[i].commentTime >= Time){
+          console.log("placing comment before time: " + commentArray[i].commentTime)
+          var commentNum = commentArray[i].commentNum;
+          $("#comment_" + commentNum).before(newComment);
+        }
+      }
+    }else{
+      console.log("appending dummy comments")
+      $(".comments").append(newComment);
+    }
+    
+    $(username).append(commentObj.userName);
+    
+    var minutes = Math.floor(Time/60);
+    var seconds = Math.floor(Time % 60);
+    if (minutes < 10) minutes = "0" + minutes;
+    if (seconds < 10) seconds = "0" + seconds;
+    var timeString = minutes + ":" + seconds;
+    // var timeString = $("#commentMinutesInput").val() + ":" + $("#commentSecondsInput").val();
+    $(userTime).append(timeString);
+
+  // Creates the Ticks
+    createTick(CommentType, CommentNum, Time);
+
+  // End
+
+    $(newComment).attr("id", "comment_" + commentObj.commentNum);
+    $(userNameAndTime).append(username, userTime);
+    $(newComment).append(relativeSpan, icon1, icon2, icon3, icon4, commentText);
+    
+    $(newComment).attr("class", "newComment");
+    $(commentText).html(CommentText);
+    
+    $(".comments").height(490);
+    
+    $("#newCommentBtn").html("New Comment");
+    $(".newCommentInput").css("display", "none");
+    $("#cmtTextInput").val("");
+  // Gives clock icons functionality (goes to point in video where comment was created())
+    $(".goToTime").on("click", function(){
+      var thisID = JSON.stringify($(this).parent("div").attr("id"));
+      var thisNum = parseInt(thisID.slice(9, thisID.length));
+      for (var i = 1; i <= commentArray.length; i++){
+        if (commentArray[i].commentNum == thisNum){
+          ytplayer.seekTo(commentArray[i].commentTime);
+          break;
+        }
+      }
+    });
+    $(".goToTime").tooltip({html: "Go to time in video"})
+  // End
+  }
+
+// End
+
+// Creates dummy comments
+  var autoProgress = $.Deferred();
+  var f_poll = function(){
+    if("ytplayer" in window){
+      if (ytplayer.getDuration() !== 0){
+        console.log("ytPlayer Duration set")
+        autoProgress.resolve();
+      }else{
+        console.log(ytplayer.getDuration());
+        setTimeout(f_poll, 100);
+      }
+    }else{
+      setTimeout(f_poll, 100);
+    }
+  }
+  setTimeout(f_poll, 100);
+  autoProgress.done(function(){
+    for (var i = 1; i <= commentArray.length - 1; i++){
+      createComment(commentArray[i].commentNum, commentArray[i].commentType, commentArray[i].upvotes, commentArray[i].commentText, commentArray[i].commentTime, commentArray[i].userName);
+    }
+    $(".tickMark").on("mouseenter", function(){
+      console.log($(this))
+      console.log("margin-left: " + parseFloat($(this).css("margin-left")))
+      $(this).css("width", 7).css("margin-left", parseFloat($(this).css("margin-left")) - 3);
+      // $(this).animate({"width": 7, "margin-left": parseFloat($(this).css("margin-left")) - 3}, 500);
+      var thisID = JSON.stringify($(this).attr("id"));
+      for (var i = 0; i <= thisID.length - 1; i++){
+        if (thisID[i] == "_"){
+          var numStart = i + 1;          
+        }
+      }
+      var tickNum = parseInt(thisID.slice(numStart, thisID.length));
+
+      for (var i = 1; i <= commentArray.length - 1; i++){
+        if (commentArray[i].commentNum == tickNum){
+          var tickContent = commentArray[i].commentText;
+          var tickTitle = commentArray[i].userName;
+          $(this).popover({trigger: "hover", placement: "bottom",title: tickTitle, content: tickContent});
+          $(this).popover("show");
         }
       }
       
@@ -257,16 +397,14 @@ google.setOnLoadCallback(_run);
       $(this).css("width", 1).css("margin-left", parseFloat($(this).css("margin-left")) + 3);
       $(this).popover("hide");
     })
+  })
 
-  }
-// End
-
-// Comments
   
-
 // End
 
 $(document).ready(function(){
+
+
   /*var TestObject = Parse.Object.extend("TestObject");
   var testObject = new TestObject();
   testObject.save({foo: "bar"}, {
@@ -275,35 +413,7 @@ $(document).ready(function(){
     }
   })*/
   
-  
-  // Initializes Test Comments
-    /*for (var i = 1; i <= commentNumArray.length - 1; i++){
-      var testComment = 
-      '<div id = "comment_' + i + '" class = "newComment">'
-        + '<span style = "position: relative"><div class = "userNameAndTime"><span id = "username">Dsan10s</span><span id = "userTime" style = "float: right;">00:00</span></div></span>'
-        + "<img src = 'images/QuestionIcon.png' class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'/>"
-        + "<img src = 'images/GoToTimeIcon.png' class = 'icon goToTime' style = 'margin-left: 5px; margin-right: 4px;'/>"
-        + '<div class = "icon" style = "margin-left: 5px; margin-right: 4px;"></div>'
-        + '<div class = "icon" style = "margin-left: 5px; margin-right: 4px;"></div>'
-        + '<textarea readonly class = "commentText" style = "cursor: default">Here you will see a bunch of text.  Sup.  If this formatted correctly then huzzah.</textarea>'
-      + "</div>";
-      $(".comments").append(testComment);
-      var testCommentObj = {commentNum: 0, commentType: "C", upvotes: 0, commentText: "", time: 0, userName: "Dsan10s"};
-      testCommentObj.commentNum = i;
-      testCommentObj.commentText = "Here you will see a bunch of text.  Sup.  If this formatted correctly then huzzah.";
-      commentArray.push(testCommentObj);
-    }*/
-  // End
-  /*<div id = "comment_1" class = "newComment">
-    <span style = "position: relative"><div class = "userNameAndTime"><span id = "username">Dsan10s</span><span id = "userTime" style = "float: right;">00:00</span></div></span>
 
-    <img src = 'images/QuestionIcon.png' class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'/>
-    <img src = 'images/GoToTimeIcon.png' class = 'icon goToTime' style = 'margin-left: 5px; margin-right: 4px;'/>
-    <div class = "icon"></div>
-    <div class = "icon"></div>
-    <textarea readonly class = "commentText" style = "cursor: default">Here you will see a bunch of text.  Sup.  If this formatted correctly then huzzah.</textarea>
-    
-  </div>*/
 
   var tickTimes = [];
   
@@ -382,7 +492,7 @@ $(document).ready(function(){
 
     var commentsHeight = parseInt($(".comments").css("height"));
     $("#newCommentBtn").on("click", function(){
-      
+            
       var currentTimeString = $("#minutes").html() + ":" + $("#seconds").html()
       $("#commentMinutesInput").val($("#minutes").html());
       $("#commentSecondsInput").val($("#seconds").html());
@@ -418,90 +528,24 @@ $(document).ready(function(){
 
   // Posting a new comment
     $("#cmtPostBtn").on("click", function(){
-    // Initialize the new comment html 
-      var newComment = $("<div id = 'newComment'></div>");
-      var relativeSpan = $("<span style = 'position: relative'></span>")
-      var userNameAndTime = $("<div class = 'userNameAndTime'></div>");
-      var username = $("<span id = 'username'></span>");
-      var userTime = $("<span id = 'userTime' style = 'float: right'></span>")
-      var icon1 = $("<img src = 'images/CommentIcon.png' class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'/>");
-      var icon2 = $("<img src = 'images/GoToTimeIcon.png' class = 'icon goToTime' style = 'margin-left: 5px; margin-right: 4px;'/>");
-      var icon3 = $("<div class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'></div>");
-      var icon4 = $("<div class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'></div>");
-      var commentText = $("<textarea readonly class = 'commentText' style = 'cursor: default'></textarea>");
-    // End
-      var currentTime = (parseInt($("#minutes").html()) * 60) + parseInt($("#seconds").html());
-      console.log("currentTime: " + currentTime)
-      var commentObj = {commentNum: 0, commentType: "", upvotes: 0, commentText: "", time: currentTime, userName: "User1"};
-      var commentString = $("#minutes").html() + ":" + $("#seconds").html()
-      //var NewCommentObj = Parse.Object.extend("NewCommentObj");
-      //var newCommentObj = new NewCommentObj();
+      var CommentNum = commentNumArray[commentNumArray.length - 1] + 1;;
+      var CommentType = "C";
+        if ($("#cmtTypeBtn").html() == "Question"){CommentType = "Q";}
+        else if ($("#cmtTypeBtn").html() == "Comment"){CommentType = "C";}
+        else if ($("#cmtTypeBtn").html() == "Instructor Note"){CommentType = "IN";}
+      var Upvotes = 0;
+      var CommentText = $("#cmtTextInput").val();
+      var Time = (parseFloat($("#commentMinutesInput").val()) * 60) + parseFloat($("#commentSecondsInput").val());
+      var UserName = "User1";
 
-      commentObj.commentNum = commentNumArray[commentNumArray.length - 1] + 1;
-      //newCommentObj.save("commentNum", commentNumArray[commentNumArray.length - 1] + 1);
-
-      commentNumArray.push(commentObj.commentNum);
-      commentObj.commentType = "C";
-      if ($("#cmtTypeBtn").html() == "Question"){
-        commentObj.commentType = "Q";
-       // newCommentObj.save("commentType", "Q");
-        $(icon1).attr("src", "images/QuestionIcon.png")
-      }
-      else if ($("#cmtTypeBtn").html() == "Comment"){
-        commentObj.commentType = "C";
-        //newCommentObj.save("commentType", "C");
-      }
-      else if ($("#cmtTypeBtn").html() == "Instructor Note"){
-        commentObj.commentType = "IN";
-        //newCommentObj.save("commentType", "IN");
-        $(icon1).attr("src", "images/InstructorNoteIcon.png");
-      }
-      commentObj.commentText = $("#cmtTextInput").val();
-      // commentObj.time = $("#commentTimeInput").val();
-
-      console.log(commentObj);
+      createComment(CommentNum, CommentType, Upvotes, CommentText, Time, UserName);
+      var commentObj = {commentNum: CommentNum, commentType: CommentType, upvotes: Upvotes, commentText: CommentText, commentTime: Time, userName: UserName};
       commentArray.push(commentObj);
-
-      $(relativeSpan).append(userNameAndTime)
-      $("commentText").html("<p>" + commentObj.commentText + "</p>");
-      $(".comments").append(newComment);
-      $(username).append(commentObj.userName);
-      $(userTime).append(commentString);
-
-    // Creates the Ticks
-      createTick(commentObj.commentType, commentObj.commentNum, currentTime);
-
-      $(newComment).attr("id", "comment_" + commentObj.commentNum);
-      console.log("#comment_" + commentObj.commentNum + " .userNameAndTime");
-      $(userNameAndTime).append(username, userTime);
-      console.log(commentObj)
-      $(newComment).append(relativeSpan, icon1, icon2, icon3, icon4, commentText);
-      
-      $(newComment).attr("class", "newComment");
-      $(commentText).html(commentObj.commentText);
-      
-
-
-      $(".comments").height(490);
-      
-      
-      $("#newCommentBtn").html("New Comment");
-      $(".newCommentInput").css("display", "none");
-      $("#cmtTextInput").val("");
-    // Gives clock icons functionality (goes to point in video where comment was created())
-      $(".goToTime").on("click", function(){
-        var thisID = JSON.stringify($(this).parent("div").attr("id"));
-        var thisNum = parseInt(thisID.slice(9, thisID.length));
-        for (var i = 1; i <= commentArray.length; i++){
-          if (commentArray[i].commentNum == thisNum){
-            ytplayer.seekTo(commentArray[i].time);
-            break;
-          }
-        }
-      });
-      $(".goToTime").tooltip({html: "Go to time in video"})
-    // End
+      commentArray.sort(function(a, b){return a.commentTime - b.commentTime});
+      commentNumArray.push(CommentNum);
     })
+
+
   // End
 
     /*console.log("Retract");
