@@ -12,7 +12,8 @@ Parse.initialize("mqzGZgOEytP3cZP5PELOrGi6wOrohw6jyZo3iRJc", "z8HMJaDGWSwxjJQQwG
 // Initializes data arrays and dummy comments
   var dummyNum = 6;
   var commentNumArray = ["ph"];
-  var commentArray = ["ph", 
+  var commentArray = ["ph"];
+  var dummyCommentArray = ["ph", 
   {commentNum: 1, commentType: "C", upvotes: 0, commentText: "1", commentTime: 20, userName: "Student1"}, 
   {commentNum: 2, commentType: "Q", upvotes: 0, commentText: "2", commentTime: 37, userName: "Student2"}, 
   {commentNum: 3, commentType: "IN", upvotes: 0, commentText: "3", commentTime: 120, userName: "Instructor1"}, 
@@ -20,12 +21,58 @@ Parse.initialize("mqzGZgOEytP3cZP5PELOrGi6wOrohw6jyZo3iRJc", "z8HMJaDGWSwxjJQQwG
   {commentNum: 5, commentType: "Q", upvotes: 0, commentText: "5", commentTime: 10, userName: "Student 4"}, 
   {commentNum: 6, commentType: "Q", upvotes: 0, commentText: "6", commentTime: 130, userName: "Student 5"}];
   commentArray.sort(function(a, b){return a.commentTime - b.commentTime});
-  console.log("commentArray: " + JSON.stringify(commentArray));
 
   for (var i = 1; i <= dummyNum; i++){
     commentNumArray.push(i);
   }
   
+// End
+
+// Creates dummy comments
+  var autoProgress = $.Deferred();
+  var f_poll = function(){
+    if("ytplayer" in window){
+      if (ytplayer.getDuration() !== 0){      
+        autoProgress.resolve();
+      }else{      
+        setTimeout(f_poll, 100);
+      }
+    }else{
+      setTimeout(f_poll, 100);
+    }
+  }
+  setTimeout(f_poll, 100);
+  autoProgress.done(function(){
+    for (var i = 1; i <= dummyCommentArray.length - 1; i++){
+      createComment(dummyCommentArray[i].commentNum, dummyCommentArray[i].commentType, dummyCommentArray[i].upvotes, dummyCommentArray[i].commentText, dummyCommentArray[i].commentTime, dummyCommentArray[i].userName);
+    }
+    $(".tickMark").on("mouseenter", function(){        
+      $(this).css("width", 7).css("margin-left", parseFloat($(this).css("margin-left")) - 3);
+      // $(this).animate({"width": 7, "margin-left": parseFloat($(this).css("margin-left")) - 3}, 500);
+      var thisID = JSON.stringify($(this).attr("id"));
+      for (var i = 0; i <= thisID.length - 1; i++){
+        if (thisID[i] == "_"){
+          var numStart = i + 1;          
+        }
+      }
+      var tickNum = parseInt(thisID.slice(numStart, thisID.length));
+
+      for (var i = 1; i <= commentArray.length - 1; i++){
+        if (commentArray[i].commentNum == tickNum){
+          var tickContent = commentArray[i].commentText;
+          var tickTitle = commentArray[i].userName;
+          $(this).popover({trigger: "hover", placement: "bottom",title: tickTitle, content: tickContent});
+          $(this).popover("show");
+        }
+      }
+      
+    })
+    $(".tickMark").on("mouseleave", function(){
+      // $(this).animate({"width": 1, "margin-left": parseFloat($(this).css("margin-left")) + 3}, 500);
+      $(this).css("width", 1).css("margin-left", parseFloat($(this).css("margin-left")) + 3);
+      $(this).popover("hide");
+    })
+  })  
 // End
 
 // Set the video width (in pixels) below
@@ -34,9 +81,7 @@ var videoWidth = 1080;
 var aspectRatio = 1.6271186440677966101694915254237;
 /*$(document).ready(function(){
   if ($("body").width() - $("#commentsContainer").width() <= videoWidth){
-    videoWidth = $("body").width() - parseInt($("#commentsContainer").css("width"));
-    console.log($("body").width());
-    console.log(videoWidth)
+    videoWidth = $("body").width() - parseInt($("#commentsContainer").css("width"));    
   }
 })*/
  
@@ -109,12 +154,10 @@ function pauseVideo() {
 }
 
 function playORpause(){
-  if ($(".playORpause").attr("src") == "images/PlayIcon.png"){
-    console.log("play");
+  if ($(".playORpause").attr("src") == "images/PlayIcon.png"){  
     $(".playORpause").attr("src", "images/PauseIcon.png").attr("class", "playORpause controlImg");
     playVideo();
-  }else if($(".playORpause").attr("src") == "images/PauseIcon.png"){
-    console.log("pause");
+  }else if($(".playORpause").attr("src") == "images/PauseIcon.png"){  
     $(".playORpause").attr("src", "images/PlayIcon.png").attr("class", "playORpause controlImg");
     pauseVideo();
   }
@@ -183,8 +226,7 @@ google.setOnLoadCallback(_run);
 
 // Progress Bar
   function progressbar_click(mouseX){
-    var percentage = mouseX/$("#progressbar").width();
-    console.log($("#progressbar").width())
+    var percentage = mouseX/$("#progressbar").width();  
     $("#progressbarVal").width($("#progressbar").width()/100*percentage); //updates progressbar location
     var currentSec = percentage*ytplayer.getDuration();
     ytplayer.seekTo(currentSec, true); //updates ytplayer location in video
@@ -212,15 +254,11 @@ google.setOnLoadCallback(_run);
 
 // Tick Bar
   function createTick(commentType, commentNum, timeInSecs){
-
-    console.log("createTick called");
-    console.log("ytPlayer.getDuration: " + ytplayer.getDuration())
-    var percentage = timeInSecs/ytplayer.getDuration();
-    console.log("percentage: " + percentage);
+    
+    var percentage = timeInSecs/ytplayer.getDuration();  
     var tickHeight = $("#tickBar").height();
     var tickBarWidth = $("#tickBar").width();
-    var tickPosition = percentage * tickBarWidth;
-    console.log("tickPosition: " + tickPosition);
+    var tickPosition = percentage * tickBarWidth;  
     if (commentType == "C"){
       var newTick = $("<div style = 'position: relative'><div id = 'tick_" + commentNum + "' class = 'tickMark' style = 'position: absolute; margin-left: " + tickPosition + "px; width: 1px; height: " + tickHeight + "px; background-color: #26af00'></div></div>");
     }else if (commentType == "Q"){
@@ -231,9 +269,7 @@ google.setOnLoadCallback(_run);
     
     $("#tickBar").append(newTick);
     
-    $("#tick_" + commentNum).on("mouseenter", function(){
-      console.log($(this))
-      console.log("margin-left: " + parseFloat($(this).css("margin-left")))
+    $("#tick_" + commentNum).on("mouseenter", function(){        
       $(this).css("width", 7).css("margin-left", parseFloat($(this).css("margin-left")) - 3);
       // $(this).animate({"width": 7, "margin-left": parseFloat($(this).css("margin-left")) - 3}, 500);
       var thisID = JSON.stringify($(this).attr("id"));
@@ -264,11 +300,10 @@ google.setOnLoadCallback(_run);
 // End
 
 // Comments
-  function createComment(CommentNum, CommentType, Upvotes, CommentText, Time, UserName){
+  function createComment(CommentNum, CommentType, Upvotes, CommentText, Time, UserName){ // Creates a comment in the comments div, and pushes comment data to commentArray
     var commentObj = {commentNum: CommentNum, commentType: CommentType, upvotes: Upvotes, commentText: CommentText, commentTime: Time, userName: UserName};
-    // commentArray.push(commentObj);
-    // commentNumArray.push(CommentNum);
-    console.log(commentObj);
+    
+    // commentNumArray.push(CommentNum);  
   // Initialize the new comment html 
     var newComment = $("<div id = 'newComment'></div>");
     var relativeSpan = $("<span style = 'position: relative'></span>")
@@ -288,23 +323,40 @@ google.setOnLoadCallback(_run);
     commentObj.commentText = $("#cmtTextInput").val();       
 
     $(relativeSpan).append(userNameAndTime)
-    $("commentText").html("<p>" + commentObj.commentText + "</p>");
-    console.log("commentNum: " + dummyNum);
-    console.log("videoWidth: " + videoWidth)
-    if (commentArray.length !== (dummyNum + 1)){
-      console.log("appending a new comment");
+    $("commentText").html("<p>" + commentObj.commentText + "</p>");  
+    
+    $(newComment).attr("id", "comment_" + commentObj.commentNum);
+    $(userNameAndTime).append(username, userTime);
+    $(newComment).append(relativeSpan, icon1, icon2, icon3, icon4, commentText);
+    
+    $(newComment).attr("class", "newComment");
+    $(commentText).html(CommentText);
+
+    if (commentArray.length > 2){   
+      console.log(commentArray); 
+      var mostTime = true;
       for (var i = 1; i <= commentArray.length - 1; i++){
-        if (commentArray[i].commentTime >= Time){
-          console.log("placing comment before time: " + commentArray[i].commentTime)
+        if (commentArray[i].commentTime >= Time){        
           var commentNum = commentArray[i].commentNum;
           $("#comment_" + commentNum).before(newComment);
+          console.log("placing time: " + Time + " before time: " + commentArray[i].commentTime)
+          mostTime = false;
+          break;
         }
       }
+      if (mostTime == true){
+        console.log("appending comment because it has the largest time")
+        $(".comments").append(newComment);
+      }
     }else{
-      console.log("appending dummy comments")
+      console.log(commentArray);
+      console.log("appending comment because there are no others")  
       $(".comments").append(newComment);
     }
     
+    commentArray.push(commentObj);
+    commentArray.sort(function(a, b){return a.commentTime - b.commentTime});  
+
     $(username).append(commentObj.userName);
     
     var minutes = Math.floor(Time/60);
@@ -319,13 +371,6 @@ google.setOnLoadCallback(_run);
     createTick(CommentType, CommentNum, Time);
 
   // End
-
-    $(newComment).attr("id", "comment_" + commentObj.commentNum);
-    $(userNameAndTime).append(username, userTime);
-    $(newComment).append(relativeSpan, icon1, icon2, icon3, icon4, commentText);
-    
-    $(newComment).attr("class", "newComment");
-    $(commentText).html(CommentText);
     
     $(".comments").height(490);
     
@@ -349,59 +394,6 @@ google.setOnLoadCallback(_run);
 
 // End
 
-// Creates dummy comments
-  var autoProgress = $.Deferred();
-  var f_poll = function(){
-    if("ytplayer" in window){
-      if (ytplayer.getDuration() !== 0){
-        console.log("ytPlayer Duration set")
-        autoProgress.resolve();
-      }else{
-        console.log(ytplayer.getDuration());
-        setTimeout(f_poll, 100);
-      }
-    }else{
-      setTimeout(f_poll, 100);
-    }
-  }
-  setTimeout(f_poll, 100);
-  autoProgress.done(function(){
-    for (var i = 1; i <= commentArray.length - 1; i++){
-      createComment(commentArray[i].commentNum, commentArray[i].commentType, commentArray[i].upvotes, commentArray[i].commentText, commentArray[i].commentTime, commentArray[i].userName);
-    }
-    $(".tickMark").on("mouseenter", function(){
-      console.log($(this))
-      console.log("margin-left: " + parseFloat($(this).css("margin-left")))
-      $(this).css("width", 7).css("margin-left", parseFloat($(this).css("margin-left")) - 3);
-      // $(this).animate({"width": 7, "margin-left": parseFloat($(this).css("margin-left")) - 3}, 500);
-      var thisID = JSON.stringify($(this).attr("id"));
-      for (var i = 0; i <= thisID.length - 1; i++){
-        if (thisID[i] == "_"){
-          var numStart = i + 1;          
-        }
-      }
-      var tickNum = parseInt(thisID.slice(numStart, thisID.length));
-
-      for (var i = 1; i <= commentArray.length - 1; i++){
-        if (commentArray[i].commentNum == tickNum){
-          var tickContent = commentArray[i].commentText;
-          var tickTitle = commentArray[i].userName;
-          $(this).popover({trigger: "hover", placement: "bottom",title: tickTitle, content: tickContent});
-          $(this).popover("show");
-        }
-      }
-      
-    })
-    $(".tickMark").on("mouseleave", function(){
-      // $(this).animate({"width": 1, "margin-left": parseFloat($(this).css("margin-left")) + 3}, 500);
-      $(this).css("width", 1).css("margin-left", parseFloat($(this).css("margin-left")) + 3);
-      $(this).popover("hide");
-    })
-  })
-
-  
-// End
-
 $(document).ready(function(){
 
 
@@ -419,9 +411,7 @@ $(document).ready(function(){
   
 
   function resizePlayer(width, height){
-    var playerObj = document.getElementById("ytPlayer");
-    console.log(playerObj);
-    console.log(playerObj.height);
+    var playerObj = document.getElementById("ytPlayer");    
     playerObj.height = height;
     playerObj.width = width;
   }
@@ -496,8 +486,7 @@ $(document).ready(function(){
       var currentTimeString = $("#minutes").html() + ":" + $("#seconds").html()
       $("#commentMinutesInput").val($("#minutes").html());
       $("#commentSecondsInput").val($("#seconds").html());
-
-      console.log("click");
+    
       $("#newCommentBtn").html("Retract Comment");
       
       
@@ -508,17 +497,17 @@ $(document).ready(function(){
         $("#cTypeQ").on("click", function(){
           $("#cmtTypeBtn").html("Question");
           // commentObj.commentType = "Q";
-          // console.log(commentObj);
+        
         });
         $("#cTypeC").on("click", function(){
           $("#cmtTypeBtn").html("Comment");
           // commentObj.commentType = "C";
-          // console.log(commentObj);
+        
         });
         $("#cTypeIN").on("click", function(){
           $("#cmtTypeBtn").html("Instructor Note");
           // commentObj.commentType = "IN";
-          // console.log(commentObj);
+        
         });
       });
       
@@ -547,23 +536,20 @@ $(document).ready(function(){
 
 
   // End
-
-    /*console.log("Retract");
+    
     $("#retractCommentBtn").on("click", function(){
       $("#retractCommentBtn").attr("id", "newCommentBtn")
       $("#newCommentBtn").html("New Comment");
       $(".newCommentInput").css("display", "none");
-    }) */
+    }) 
   // End
 
   // Gives Clock Icons functionality (goes to point in video where comment was created)
     /*$(".goToTime").on("click", function(){
       var thisID = JSON.stringify($(this).parent("span").parent("div").attr("id"));
-      var thisNum = parseInt(thisID.slice(8, thisID.length));
-      console.log("thisNum: " + thisNum);
+      var thisNum = parseInt(thisID.slice(8, thisID.length));    
       for (var i = 1; i <= commentArray.length; i++){
-        if (commentArray[i].commentNum == thisNum){
-          console.log("thisNum found");
+        if (commentArray[i].commentNum == thisNum){        
           ytplayer.seekTo(thisNum);
         }
       }
