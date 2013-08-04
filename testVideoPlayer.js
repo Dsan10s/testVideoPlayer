@@ -307,28 +307,29 @@ google.setOnLoadCallback(_run);
     // commentNumArray.push(CommentNum);  
   // Initialize the new comment html 
     var newComment = $("<div id = 'newComment'></div>");
-    var relativeSpan = $("<span style = 'position: relative'></span>")
+    // var relativeSpan = $("<span style = 'position: relative'></span>")
     var userNameAndTime = $("<div class = 'userNameAndTime'></div>");
     var username = $("<span id = 'username'></span>");
+    var upvotes = $("<span id = 'upvotes'></span>")
     var userTime = $("<span id = 'userTime' style = 'float: right'></span>")
-    var icon1 = $("<img src = 'images/CommentIcon.png' class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'/>");
+    var icon1 = $("<img src = 'images/CIcon2.png' class = 'icon' />");
     var icon2 = $("<img src = 'images/GoToTimeIcon.png' class = 'icon goToTime' style = 'margin-left: 5px; margin-right: 4px;'/>");
     var icon3 = $("<div class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'></div>");
     var icon4 = $("<div class = 'icon' style = 'margin-left: 5px; margin-right: 4px;'></div>");
-    var commentText = $("<textarea readonly class = 'commentText' style = 'cursor: default'></textarea>");
+    var commentText = $("<textarea readonly class = 'commentText' style = 'cursor: default; border: 0px; background-color: #444444'></textarea>");
   // End
 
-    if (CommentType == "Q"){$(icon1).attr("src", "images/QuestionIcon.png");}
+    if (CommentType == "Q"){$(icon1).attr("src", "images/QIcon2.png");}
     else if (CommentType == "C"){/*Comment icon there by default*/}
-    else if (CommentType == "IN"){$(icon1).attr("src", "images/InstructorNoteIcon.png");}
+    else if (CommentType == "IN"){$(icon1).attr("src", "images/INIcon2.png");}
     commentObj.commentText = $("#cmtTextInput").val();       
 
-    $(relativeSpan).append(userNameAndTime)
+    // $(relativeSpan).append(userNameAndTime)
     $("commentText").html("<p>" + commentObj.commentText + "</p>");  
     
     $(newComment).attr("id", "comment_" + commentObj.commentNum);
-    $(userNameAndTime).append(username, userTime);
-    $(newComment).append(relativeSpan, icon1, icon2, icon3, icon4, commentText);
+    $(userNameAndTime).append(icon1, username, userTime);
+    $(newComment).append(userNameAndTime, /*icon1, icon2, icon3, icon4, */commentText);
     
     $(newComment).attr("class", "newComment");
     $(commentText).html(CommentText);
